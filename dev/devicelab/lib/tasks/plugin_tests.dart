@@ -26,12 +26,13 @@ TaskFunction combine(List<TaskFunction> tasks) {
 /// Defines task that creates new Flutter project, adds a local and remote
 /// plugin, and then builds the specified [buildTarget].
 class PluginTest {
-  PluginTest(this.buildTarget, this.options, { this.pluginCreateEnvironment, this.appCreateEnvironment });
+  PluginTest(this.buildTarget, this.options, {this.pluginCreateEnvironment, this.appCreateEnvironment, this.template = 'plugin' });
 
   final String buildTarget;
   final List<String> options;
   final Map<String, String>? pluginCreateEnvironment;
   final Map<String, String>? appCreateEnvironment;
+  final String template;
 
   Future<TaskResult> call() async {
     final Directory tempDir =
@@ -40,7 +41,7 @@ class PluginTest {
       section('Create plugin');
       final _FlutterProject plugin = await _FlutterProject.create(
           tempDir, options, buildTarget,
-          name: 'plugintest', template: 'plugin', environment: pluginCreateEnvironment);
+          name: 'plugintest', template: template, environment: pluginCreateEnvironment);
       section('Test plugin');
       await plugin.test();
       section('Create Flutter app');

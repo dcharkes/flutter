@@ -110,7 +110,7 @@ abstract class CreateBase extends FlutterCommand {
       abbr: 'i',
       defaultsTo: 'swift',
       allowed: <String>['objc', 'swift'],
-      help: 'The language to use for iOS-specific code, either ObjectiveC (legacy) or Swift (recommended).'
+        help: 'The language to use for iOS-specific code, either Objective-C (legacy) or Swift (recommended).'
     );
     argParser.addOption(
       'android-language',
@@ -394,6 +394,7 @@ abstract class CreateBase extends FlutterCommand {
       'iosDevelopmentTeam': iosDevelopmentTeam ?? '',
       'flutterRevision': globals.flutterVersion.frameworkRevision,
       'flutterChannel': globals.flutterVersion.channel,
+      'frameworkVersion': globals.flutterVersion.frameworkVersion,
       'ios': ios,
       'android': android,
       'web': web,
