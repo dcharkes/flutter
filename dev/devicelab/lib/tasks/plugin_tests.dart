@@ -54,8 +54,13 @@ class PluginTest {
         await app.addPlugin('path_provider');
         section('Build app');
         await app.build(buildTarget);
-        section('Test app');
-        await app.test();
+        if (template != 'plugin_ffi') {
+          // FFI plugins do not have support for `flutter test` (yet).
+          // `flutter test` does not do a native build.
+          // Supporting `flutter test` would require invoking a native build.
+          section('Test app');
+          await app.test();
+        }
       } finally {
         await plugin.delete();
         await app.delete();
