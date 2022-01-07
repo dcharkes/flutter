@@ -315,7 +315,7 @@ class CreateCommand extends CreateBase {
     switch (template) {
       case FlutterProjectType.app:
         generatedFileCount += await generateApp(
-          'app',
+          <String>['app', 'app_test_widget'],
           relativeDir,
           templateContext,
           overwrite: overwrite,
@@ -324,7 +324,7 @@ class CreateCommand extends CreateBase {
         break;
       case FlutterProjectType.skeleton:
         generatedFileCount += await generateApp(
-          'skeleton',
+          <String>['skeleton'],
           relativeDir,
           templateContext,
           overwrite: overwrite,
@@ -555,7 +555,7 @@ Your $application code is in $relativeAppMain.
     templateContext['androidPluginIdentifier'] = androidPluginIdentifier;
 
     generatedCount += await generateApp(
-      'app',
+      <String>['app', 'app_test_widget'],
       project.example.directory,
       templateContext,
       overwrite: overwrite,
@@ -631,7 +631,7 @@ Your $application code is in $relativeAppMain.
     templateContext['androidPluginIdentifier'] = androidPluginIdentifier;
 
     generatedCount += await generateApp(
-      'app',
+      <String>['app'],
       project.example.directory,
       templateContext,
       overwrite: overwrite,

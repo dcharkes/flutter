@@ -5,7 +5,6 @@
         "templates/app/lib/main.dart.tmpl",
         "templates/app/pubspec.yaml.tmpl",
         "templates/app/README.md.tmpl",
-        "templates/app/test/widget_test.dart.tmpl",
         "templates/app/winuwp.tmpl/.gitignore",
 
         "templates/app_shared/.gitignore.tmpl",
@@ -200,6 +199,8 @@
         "templates/app_shared/winuwp.tmpl/runner_uwp/main.cpp",
         "templates/app_shared/winuwp.tmpl/runner_uwp/resources.pri.img.tmpl",
         "templates/app_shared/winuwp.tmpl/runner_uwp/Windows_TemporaryKey.pfx.img.tmpl",
+
+        "templates/app_test_widget/test/widget_test.dart.tmpl",
 
         "templates/cocoapods/Podfile-ios-objc",
         "templates/cocoapods/Podfile-ios-swift",

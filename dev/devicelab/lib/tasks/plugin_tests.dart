@@ -37,13 +37,19 @@ class PluginTest {
   Future<TaskResult> call() async {
     final Directory tempDir =
         Directory.systemTemp.createTempSync('flutter_devicelab_plugin_test.');
+    // FFI plugins do not have support for `flutter test`.
+    // `flutter test` does not do a native build.
+    // Supporting `flutter test` would require invoking a native build.
+    final bool runFlutterTest = template != 'plugin_ffi';
     try {
       section('Create plugin');
       final _FlutterProject plugin = await _FlutterProject.create(
           tempDir, options, buildTarget,
           name: 'plugintest', template: template, environment: pluginCreateEnvironment);
       section('Test plugin');
-      await plugin.test();
+      if (runFlutterTest) {
+        await plugin.test();
+      }
       section('Create Flutter app');
       final _FlutterProject app = await _FlutterProject.create(tempDir, options, buildTarget,
           name: 'plugintestapp', template: 'app', environment: appCreateEnvironment);
@@ -54,10 +60,7 @@ class PluginTest {
         await app.addPlugin('path_provider');
         section('Build app');
         await app.build(buildTarget);
-        if (template != 'plugin_ffi') {
-          // FFI plugins do not have support for `flutter test` (yet).
-          // `flutter test` does not do a native build.
-          // Supporting `flutter test` would require invoking a native build.
+        if (runFlutterTest) {
           section('Test app');
           await app.test();
         }
