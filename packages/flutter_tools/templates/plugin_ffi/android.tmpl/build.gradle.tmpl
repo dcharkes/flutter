@@ -25,24 +25,25 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    // Bumping the plugin compileSdkVersion requires all users of this plugin
+    // to bump the version in their app.
     compileSdkVersion 31
 
+    // Bumping the plugin ndkVersion requires all users of this plugin to bump
+    // the version in their app and to download a newer version of the NDK.
+    ndkVersion "21.1.6352462"
+
     // Invoke the shared CMake build with the Android Gradle Plugin.
-    //
-    // We do _not_ specify the NDK and CMake version here. This way we will
-    // automatically get the default versions from the Android Gradle Plugin.
-    //
-    // Android Gradle Plugin 4.1.0: Android NDK 21.1.6352462.
-    // https://developer.android.com/studio/projects/install-ndk#default-ndk-per-agp
-    // CMake 3.10.2.
-    // https://developer.android.com/studio/projects/install-ndk#vanilla_cmake
-    //
-    // You are strongly encouraged to not ship FFI plugins requiring newer
-    // versions of the NDK or CMake, because your clients will not be able to
-    // use them.
     externalNativeBuild {
         cmake {
             path "../src/CMakeLists.txt"
+
+            // The default CMake version for the Android Gradle Plugin is 3.10.2.
+            // https://developer.android.com/studio/projects/install-ndk#vanilla_cmake
+            //
+            // Changing the CMake version requires all users of this plugin to
+            // download that CMake version.
+            // version "3.10.2"
         }
     }
 
