@@ -468,8 +468,11 @@ Future<List<File>> _copyNativeCodeAssetsForOS(
     await entity.delete(recursive: true);
   }
 
+  final File sentinelFile = targetDir.childFile('.keep');
+  await sentinelFile.create();
+
   if (assetTargetLocations.isEmpty) {
-    return const <File>[];
+    return <File>[sentinelFile];
   }
 
   globals.logger.printTrace('Copying native assets to ${targetUri.toFilePath()}.');
@@ -522,7 +525,7 @@ Future<List<File>> _copyNativeCodeAssetsForOS(
       throw StateError('This should be unreachable.');
   }
   globals.logger.printTrace('Copying native assets done.');
-  return installedFiles;
+  return <File>[sentinelFile, ...installedFiles];
 }
 
 /// Invokes the build of all transitive Dart packages.

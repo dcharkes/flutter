@@ -253,6 +253,50 @@ void main() {
       });
     });
   }
+
+  testWithoutContext('native assets directory and .keep are recreated when cached', () async {
+    await inTempDir((Directory tempDirectory) async {
+      final Directory packageDirectory = await createTestProject(packageName, tempDirectory);
+      final Directory exampleDirectory = packageDirectory.childDirectory('example');
+
+      // 1. First build to populate cache and create the directory.
+      final ProcessResult result1 = await processManager.run(<String>[
+        flutterBin,
+        'build',
+        platform.operatingSystem,
+        '--debug',
+      ], workingDirectory: exampleDirectory.path);
+      expect(result1.exitCode, 0, reason: result1.stderr.toString());
+
+      final String os = platform.operatingSystem;
+      final Directory nativeAssetsDir = exampleDirectory
+          .childDirectory('build')
+          .childDirectory('native_assets')
+          .childDirectory(os);
+      final File keepFile = nativeAssetsDir.childFile('.keep');
+
+      expect(nativeAssetsDir, exists);
+      expect(keepFile, exists);
+
+      // 2. Delete the native_assets directory but keep .dart_tool (where the build cache is).
+      nativeAssetsDir.deleteSync(recursive: true);
+      expect(nativeAssetsDir, isNot(exists));
+
+      // 3. Build again. It should be a cache hit for the build system,
+      // but it MUST recreate the directory and the .keep file.
+      final ProcessResult result2 = await processManager.run(<String>[
+        flutterBin,
+        'build',
+        platform.operatingSystem,
+        '--debug',
+      ], workingDirectory: exampleDirectory.path);
+      expect(result2.exitCode, 0, reason: result2.stderr.toString());
+
+      // Check if the directory and .keep file were recreated.
+      expect(nativeAssetsDir, exists, reason: 'native_assets/$os directory should be recreated');
+      expect(keepFile, exists, reason: '.keep file should be recreated');
+    });
+  });
 }
 
 void addIntegrationTest(Uri exampleDirectory, String packageName) {
